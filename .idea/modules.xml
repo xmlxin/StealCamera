@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/StealCamera.iml" filepath="$PROJECT_DIR$/StealCamera.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/camera.iml" filepath="$PROJECT_DIR$/camera.iml" />
+      <module fileurl="file://C:\Users\xiaoxin\develop\ASwork\githup\myGit\StealCamera\app\app.iml" filepath="C:\Users\xiaoxin\develop\ASwork\githup\myGit\StealCamera\app\app.iml" />
+      <module fileurl="file://C:\Users\xiaoxin\develop\ASwork\githup\myGit\StealCamera\camera.iml" filepath="C:\Users\xiaoxin\develop\ASwork\githup\myGit\StealCamera\camera.iml" />
     </modules>
   </component>
 </project>

@@ -31,7 +31,7 @@ public class BitmapUtil {
         // 将得到的照片进行270°旋转，使其竖直
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         Matrix matrix = new Matrix();
-        matrix.setRotate(270);
+        matrix.setRotate(90);//后置摄像头选择90度，前置摄像头旋转270度
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
         File picturePath = FileUtil.picturePath();

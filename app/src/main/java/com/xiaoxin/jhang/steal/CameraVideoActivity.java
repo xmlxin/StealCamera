@@ -1,42 +1,27 @@
 package com.xiaoxin.jhang.steal;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
 import com.xiaoxin.jhang.steal.util.BitmapUtil;
-
-import java.io.File;
-import java.io.FileOutputStream;
+import com.xiaoxin.jhang.steal.util.FileUtil;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 public class CameraVideoActivity extends AppCompatActivity {
 
     private static final String TAG = "CameraVideoActivity";
     private MediaRecorder mMediaRecorder;
-
     private Camera mCamera;
     private SurfaceView mSurfaceView;
     private SurfaceHolder mSurfaceHolder;
@@ -99,7 +84,7 @@ public class CameraVideoActivity extends AppCompatActivity {
      * 设置camera参数
      */
     protected void initPreview() {
-        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);//设置前后摄像头0,1
+        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);//设置前后摄像头0,1
         Camera.Parameters parameters = mCamera.getParameters();
 //        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);//设置自动对焦
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);//设置不断聚焦
@@ -123,10 +108,8 @@ public class CameraVideoActivity extends AppCompatActivity {
         mCamera.startPreview();
     }
 
-    public static void setCameraDisplayOrientation(Activity activity,
-                                                   int cameraId, Camera camera) {
-        Camera.CameraInfo info =
-                new Camera.CameraInfo();
+    public static void setCameraDisplayOrientation(Activity activity,int cameraId, Camera camera) {
+        Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(cameraId, info);
         int rotation = activity.getWindowManager().getDefaultDisplay()
                 .getRotation();
@@ -146,9 +129,7 @@ public class CameraVideoActivity extends AppCompatActivity {
             result = (info.orientation - degrees + 360) % 360;
         }
 //        camera.setDisplayOrientation(180);
-
         camera.setDisplayOrientation(result);
-
     }
 
     private Camera.PictureCallback mPicture = new Camera.PictureCallback() {
@@ -156,47 +137,17 @@ public class CameraVideoActivity extends AppCompatActivity {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
             // 将得到的照片进行270°旋转，使其竖直
-
-            Bitmap bitmap1 = BitmapUtil.obtainPic(data);
-
-//            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-//            Matrix matrix = new Matrix();
-//            matrix.setRotate(270);
-//            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-//
-//
-//            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//            File pictureFile = new File(getDir(), "IMG_" + timeStamp + ".jpg");
+            //处理图像数据
+            BitmapUtil.obtainPic(data);
 
             try {
-
-//                FileOutputStream fos = new FileOutputStream(pictureFile);
-//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-//                fos.close();
-
-//                FileOutputStream fos = new FileOutputStream(pictureFile);
-//                fos.write(data);
-//                fos.close();
-//                Log.e(TAG,"save success");
                 mCamera.reconnect();
-                CameraVideoActivity.this.finish();
+                finish();
             } catch (Exception e) {
                 Log.e(TAG, "File not found: " + e.getMessage());
             }
         }
     };
-
-    private File getDir() {
-        // 得到SD卡根目录
-        File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaoxin/");
-
-        if (dir.exists()) {
-            return dir;
-        } else {
-            dir.mkdirs();
-            return dir;
-        }
-    }
 
     protected void releaseCamera() {
         if(mCamera!=null){
@@ -217,7 +168,7 @@ public class CameraVideoActivity extends AppCompatActivity {
         // Step 1: Unlock and set camera to MediaRecorder
         mCamera.unlock();
         mMediaRecorder.setCamera(mCamera);
-        mMediaRecorder.setOrientationHint(270);// 输出旋转90度，保持竖屏录制
+        mMediaRecorder.setOrientationHint(90);//78后置摄像头选择90度，前置摄像头旋转270度
 
         // Step 2: Set sources
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);//VOICE_RECOGNITION
@@ -244,10 +195,8 @@ public class CameraVideoActivity extends AppCompatActivity {
 //        CamcorderProfile mCamcorderProfile = CamcorderProfile.get(Camera.CameraInfo.CAMERA_FACING_BACK,
 //                CamcorderProfile.QUALITY_HIGH);//QUALITY_2160P
 //        mMediaRecorder.setProfile(mCamcorderProfile);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        mMediaRecorder.setOutputFile(getDir().toString() + "/VIDEO"+timeStamp+".mp4");
+        mMediaRecorder.setOutputFile(FileUtil.videoPath());
         mMediaRecorder.setPreviewDisplay(mSurfaceHolder.getSurface());
-        // END_INCLUDE (configure_media_recorder)
         try {
             //准备录制
             mMediaRecorder.prepare();
@@ -256,7 +205,6 @@ public class CameraVideoActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void stopMediaRecorder() {
@@ -270,9 +218,8 @@ public class CameraVideoActivity extends AppCompatActivity {
                 mIsRecording = false;
                 try {
                     mCamera.reconnect();
-                } catch (IOException e) {
-                    Toast.makeText(this, "reconect fail", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    Log.e(TAG, "reconect fail"+e.toString());
                 }
             }
         }
@@ -287,7 +234,7 @@ public class CameraVideoActivity extends AppCompatActivity {
         public void run() {
             stopMediaRecorder();
             this.cancel();
-            CameraVideoActivity.this.finish();
+            finish();
         }
     }
 }

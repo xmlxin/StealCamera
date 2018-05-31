@@ -29,7 +29,11 @@ public class FileUtil {
 
     public static File picturePath() {
         FileUtil.isPathExist();
-        File pictureFile = new File(Config.PATH + "IMG_" + DateUtil.FormatData() + ".jpg");
-        return pictureFile;
+        return new File(Config.PATH + "IMG_" + DateUtil.FormatData() + ".jpg");
+    }
+
+    public static String videoPath() {
+        FileUtil.isPathExist();
+        return Config.PATH + "VID_" + DateUtil.FormatData() + ".mp4";
     }
 }
