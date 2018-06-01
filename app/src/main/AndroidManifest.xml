@@ -10,10 +10,8 @@
 
     <!-- 允许程序录制音频 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW"/>
-
+    <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -32,9 +30,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CameraVideoActivity"
-            android:theme="@style/transparent" />
-        <service android:name=".service.CameraService"/>
+            android:name=".CameraVideoActivity"/>
+
+        <service android:name=".service.CameraService" />
+
+        <activity android:name=".ConfigActivity"/>
     </application>
 
 </manifest>

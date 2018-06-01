@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
+
 import com.xiaoxin.jhang.steal.util.BitmapUtil;
 import com.xiaoxin.jhang.steal.util.FileUtil;
 import java.io.IOException;
@@ -29,10 +32,25 @@ public class CameraVideoActivity extends AppCompatActivity {
     private int mTime;
     private boolean mPicVideo;
 
+    Button start;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+        start = (Button)findViewById(R.id.bt_start);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCamera.takePicture(null, null, mPicture);
+                        Log.e(TAG,"拍照");
+                    }
+                },2000);//延迟2s做准备
+            }
+        });
         mSurfaceView = (SurfaceView)findViewById(R.id.surfaceview);
 
         mSurfaceHolder = mSurfaceView.getHolder();
@@ -44,6 +62,7 @@ public class CameraVideoActivity extends AppCompatActivity {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
+                Log.e(TAG, "初始化surfaceCreated: " );
                 initPreview();
             }
 
@@ -57,25 +76,25 @@ public class CameraVideoActivity extends AppCompatActivity {
         mPicVideo = getIntent().getBooleanExtra("pic_video",false);
         mTime = getIntent().getIntExtra("time",10);
 
-        if (mPicVideo) {  //拍照
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mCamera.takePicture(null, null, mPicture);
-                    Log.e(TAG,"拍照");
-                }
-            },2000);//延迟2s做准备
-        }else {  //录像
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log.e(TAG,"录像");
-                    startMediaRecorder();
-                    Timer timer = new Timer();
-                    timer.schedule(new TimerThread(), mTime * 1000);
-                }
-            },2000);
-        }
+//        if (mPicVideo) {  //拍照
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mCamera.takePicture(null, null, mPicture);
+//                    Log.e(TAG,"拍照");
+//                }
+//            },2000);//延迟2s做准备
+//        }else {  //录像
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.e(TAG,"录像");
+//                    startMediaRecorder();
+//                    Timer timer = new Timer();
+//                    timer.schedule(new TimerThread(), mTime * 1000);
+//                }
+//            },2000);
+//        }
 
 
     }
@@ -98,6 +117,7 @@ public class CameraVideoActivity extends AppCompatActivity {
                 break;
             }
         }
+
         mCamera.setParameters(parameters);//最后一定要把parameters设置给camera
         try {
             mCamera.setPreviewDisplay(mSurfaceHolder);
@@ -129,6 +149,7 @@ public class CameraVideoActivity extends AppCompatActivity {
             result = (info.orientation - degrees + 360) % 360;
         }
 //        camera.setDisplayOrientation(180);
+        Log.e(TAG, "result: "+result );
         camera.setDisplayOrientation(result);
     }
 
@@ -142,7 +163,7 @@ public class CameraVideoActivity extends AppCompatActivity {
 
             try {
                 mCamera.reconnect();
-                finish();
+//                finish();
             } catch (Exception e) {
                 Log.e(TAG, "File not found: " + e.getMessage());
             }

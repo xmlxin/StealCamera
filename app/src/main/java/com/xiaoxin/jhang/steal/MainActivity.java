@@ -36,15 +36,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void pic() {
 
-        Intent intent = new Intent(this, CameraVideoActivity.class);
+        Intent intent = new Intent(this, CameraService.class);
         intent.putExtra("pic_video",true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startService(intent);
     }
 
     public void video() {
-
-        Intent intent = new Intent(this, CameraVideoActivity.class);
+        Intent intent = new Intent(this, CameraService.class);
         intent.putExtra("pic_video",false);
         intent.putExtra("time",10);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

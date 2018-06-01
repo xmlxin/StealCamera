@@ -27,24 +27,28 @@ public class BitmapUtil {
      * @param data
      * @return
      */
-    public static Bitmap obtainPic(byte[] data) {
-        // 将得到的照片进行270°旋转，使其竖直
-        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-        Matrix matrix = new Matrix();
-        matrix.setRotate(90);//后置摄像头选择90度，前置摄像头旋转270度
-        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+    public static void obtainPic(final byte[] data) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // 将得到的照片进行270°旋转，使其竖直
+                Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                Matrix matrix = new Matrix();
+                matrix.setRotate(90);//后置摄像头:正着拍需要选择90度倒着拍需要选择270度，前置摄像头旋转270度
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-        File picturePath = FileUtil.picturePath();
+                File picturePath = FileUtil.picturePath();
 
-        try {
-            FileOutputStream fos = new FileOutputStream(picturePath);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.close();
-            return bitmap;
-        } catch (Exception e) {
-            Log.e(TAG, "File not found: " + e.getMessage());
-        }
-        return bitmap;
+                try {
+                    FileOutputStream fos = new FileOutputStream(picturePath);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    fos.close();
+                } catch (Exception e) {
+                    Log.e(TAG, "File not found: " + e.getMessage());
+                }
+            }
+        }).start();
+
     }
 
 }

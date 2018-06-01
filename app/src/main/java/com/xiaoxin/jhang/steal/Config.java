@@ -25,9 +25,10 @@ public class Config {
     //前置摄像头旋转角度
     public static int ROTATE_ANGLE_FRONT = 270;
 
-    //video时长，默认10s
-    public static int VIDEO_TIME = 10;
     //选择拍照还是录像 默认拍照
-    public static boolean PIC_OR_VIDEO = true;
+    public static String PIC_OR_VIDEO = "pic_video";
+    public static String VIDEO_TIME = "time";
+    //video时长，默认10s
+    public static int TIME = 10;
 
 }

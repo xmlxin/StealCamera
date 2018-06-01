@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">StealCamera</string>
+    <string name="accessibility_description">微信插件</string>
 </resources>
