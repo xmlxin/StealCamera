@@ -7,9 +7,17 @@
     tools:context="com.xiaoxin.jhang.steal.MainActivity">
 
     <Button
+        android:id="@+id/bt_white"
+        android:text="demo0"
+        android:layout_marginTop="300dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <Button
         android:id="@+id/bt_pic"
         android:text="demo1"
-        android:layout_marginTop="300dp"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

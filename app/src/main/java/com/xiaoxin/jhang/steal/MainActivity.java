@@ -24,8 +24,13 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_pic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                pic();
                 addWhiteApp();
+            }
+        });
+        findViewById(R.id.bt_pic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pic();
             }
         });
 
@@ -58,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void pic() {
-
         Intent intent = new Intent(this, CameraVideoActivity.class);
         intent.putExtra("pic_video",true);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -76,10 +80,9 @@ public class MainActivity extends AppCompatActivity {
     private void addWhiteApp() {
         if(Build.MANUFACTURER.equals("Xiaomi")) {
             Intent intent = new Intent();
-            intent.setAction("miui.intent.action.OP_AUTO_START");
-            //com.miui.powerkeeper/.ui.HiddenAppsConfigActivity
-            intent.setClassName("com.miui.powerkeeper","com.miui.powerkeeper.ui.HiddenAppsContainerManagementActivity");
+//            intent.setAction("miui.intent.action.OP_AUTO_START");//小米开机自启action
 //            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            intent.setClassName("com.miui.powerkeeper","com.miui.powerkeeper.ui.HiddenAppsContainerManagementActivity");
             startActivity(intent);
         }
     }
