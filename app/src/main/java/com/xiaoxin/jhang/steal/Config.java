@@ -15,7 +15,10 @@ public class Config {
     //路径
     public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaoxin/";
 
+    public static final String SECRET_CODE = "123456";
     /** camera */
+    //设置摄像头状态
+    public static String cameraBack = "cameraBack";
     //后置摄像头
     public static int CAMERA_FACING_BACK = Camera.CameraInfo.CAMERA_FACING_BACK;
     //前置摄像头

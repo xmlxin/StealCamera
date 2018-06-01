@@ -8,7 +8,7 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
-    <!--震动权限-->
+    <!-- 震动权限 -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- 允许程序录制音频 -->
@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -33,11 +34,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CameraVideoActivity" android:theme="@style/transparent"/>
+            android:name=".CameraVideoActivity"
+            android:theme="@style/transparent" />
 
         <service android:name=".service.CameraService" />
 
-        <activity android:name=".ConfigActivity"/>
+        <activity android:name=".ConfigActivity" />
+
+        <receiver android:name=".receiver.PhoneListener">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SECRET_CODE" />
+
+                <data android:scheme="android_secret_code" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".CameraConfigActivity"></activity>
     </application>
 
 </manifest>

@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.bt_pic).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.bt_white).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addWhiteApp();

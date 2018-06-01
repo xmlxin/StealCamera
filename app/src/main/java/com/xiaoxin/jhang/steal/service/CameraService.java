@@ -22,8 +22,10 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 
+import com.xiaoxin.jhang.steal.Config;
 import com.xiaoxin.jhang.steal.util.BitmapUtil;
 import com.xiaoxin.jhang.steal.util.FileUtil;
+import com.xiaoxin.jhang.steal.util.PrefUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -157,7 +159,7 @@ public class CameraService extends Service {
      * 设置camera参数
      */
     protected void initPreview() {
-        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);//设置前后摄像头0,1
+        mCamera = Camera.open(PrefUtils.getInt(this, Config.cameraBack, 0));//设置前后摄像头0,1
         Camera.Parameters parameters = mCamera.getParameters();
 //        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);//设置自动对焦
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);//设置不断聚焦

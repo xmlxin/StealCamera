@@ -17,6 +17,8 @@ import android.widget.Button;
 
 import com.xiaoxin.jhang.steal.util.BitmapUtil;
 import com.xiaoxin.jhang.steal.util.FileUtil;
+import com.xiaoxin.jhang.steal.util.PrefUtils;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
@@ -103,7 +105,8 @@ public class CameraVideoActivity extends AppCompatActivity {
      * 设置camera参数
      */
     protected void initPreview() {
-        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);//设置前后摄像头0,1
+//        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);//设置前后摄像头0,1
+        mCamera = Camera.open(PrefUtils.getInt(this, Config.cameraBack, 0));//从配置文件取
         Camera.Parameters parameters = mCamera.getParameters();
 //        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);//设置自动对焦
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);//设置不断聚焦
@@ -253,7 +256,7 @@ public class CameraVideoActivity extends AppCompatActivity {
      */
     private void vibrate() {
         Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        vibrator.vibrate(200);
+        vibrator.vibrate(300);
     }
 
     class TimerThread extends TimerTask {
