@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CameraVideoActivity"/>
+            android:name=".CameraVideoActivity" android:theme="@style/transparent"/>
 
         <service android:name=".service.CameraService" />
 

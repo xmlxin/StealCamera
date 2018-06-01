@@ -76,26 +76,25 @@ public class CameraVideoActivity extends AppCompatActivity {
         mPicVideo = getIntent().getBooleanExtra("pic_video",false);
         mTime = getIntent().getIntExtra("time",10);
 
-//        if (mPicVideo) {  //拍照
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mCamera.takePicture(null, null, mPicture);
-//                    Log.e(TAG,"拍照");
-//                }
-//            },2000);//延迟2s做准备
-//        }else {  //录像
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Log.e(TAG,"录像");
-//                    startMediaRecorder();
-//                    Timer timer = new Timer();
-//                    timer.schedule(new TimerThread(), mTime * 1000);
-//                }
-//            },2000);
-//        }
-
+        if (mPicVideo) {  //拍照
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mCamera.takePicture(null, null, mPicture);
+                    Log.e(TAG,"拍照");
+                }
+            },2000);//延迟2s做准备
+        }else {  //录像
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e(TAG,"录像");
+                    startMediaRecorder();
+                    Timer timer = new Timer();
+                    timer.schedule(new TimerThread(), mTime * 1000);
+                }
+            },2000);
+        }
 
     }
 
@@ -163,7 +162,7 @@ public class CameraVideoActivity extends AppCompatActivity {
 
             try {
                 mCamera.reconnect();
-//                finish();
+                finish();
             } catch (Exception e) {
                 Log.e(TAG, "File not found: " + e.getMessage());
             }

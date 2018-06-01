@@ -32,9 +32,16 @@ public class MainActivity extends AppCompatActivity {
                 video();
             }
         });
+
+        findViewById(R.id.bt_service).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startService();
+            }
+        });
     }
 
-    public void pic() {
+    public void startService() {
 
         Intent intent = new Intent(this, CameraService.class);
         intent.putExtra("pic_video",true);
@@ -42,12 +49,20 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
     }
 
+    public void pic() {
+
+        Intent intent = new Intent(this, CameraVideoActivity.class);
+        intent.putExtra("pic_video",true);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     public void video() {
-        Intent intent = new Intent(this, CameraService.class);
+        Intent intent = new Intent(this, CameraVideoActivity.class);
         intent.putExtra("pic_video",false);
         intent.putExtra("time",10);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startService(intent);
+        startActivity(intent);
     }
 
     int count = -1;
