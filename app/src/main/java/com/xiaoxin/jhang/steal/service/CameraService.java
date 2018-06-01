@@ -12,6 +12,7 @@ import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -214,6 +215,7 @@ public class CameraService extends Service {
 
             try {
                 mCamera.reconnect();
+                vibrate();
 //                finish();
             } catch (Exception e) {
                 Log.e(TAG, "File not found: " + e.getMessage());
@@ -290,11 +292,18 @@ public class CameraService extends Service {
                 mIsRecording = false;
                 try {
                     mCamera.reconnect();
+                    vibrate();
                 } catch (Exception e) {
                     Log.e(TAG, "reconect fail"+e.toString());
                 }
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(innerReceiver);
     }
 
     class TimerThread extends TimerTask {
@@ -328,5 +337,14 @@ public class CameraService extends Service {
             }
         }
     }
+
+    /**
+     * 震动00毫秒
+     */
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        vibrator.vibrate(500);
+    }
+
 
 }

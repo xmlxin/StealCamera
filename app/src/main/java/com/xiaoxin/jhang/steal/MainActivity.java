@@ -2,6 +2,8 @@ package com.xiaoxin.jhang.steal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_pic).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pic();
+//                pic();
+                addWhiteApp();
             }
         });
 
@@ -39,13 +42,18 @@ public class MainActivity extends AppCompatActivity {
                 startService();
             }
         });
+
+        findViewById(R.id.bt_stopService).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopService(new Intent(MainActivity.this, CameraService.class));
+            }
+        });
     }
 
     public void startService() {
-
         Intent intent = new Intent(this, CameraService.class);
         intent.putExtra("pic_video",true);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startService(intent);
     }
 
@@ -64,6 +72,19 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
+
+    private void addWhiteApp() {
+        if(Build.MANUFACTURER.equals("Xiaomi")) {
+            Intent intent = new Intent();
+            intent.setAction("miui.intent.action.OP_AUTO_START");
+            //com.miui.powerkeeper/.ui.HiddenAppsConfigActivity
+            intent.setClassName("com.miui.powerkeeper","com.miui.powerkeeper.ui.HiddenAppsContainerManagementActivity");
+//            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            startActivity(intent);
+        }
+    }
+
+
 
     int count = -1;
 

@@ -6,6 +6,7 @@ import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Surface;
@@ -162,6 +163,7 @@ public class CameraVideoActivity extends AppCompatActivity {
 
             try {
                 mCamera.reconnect();
+                vibrate();
                 finish();
             } catch (Exception e) {
                 Log.e(TAG, "File not found: " + e.getMessage());
@@ -238,11 +240,20 @@ public class CameraVideoActivity extends AppCompatActivity {
                 mIsRecording = false;
                 try {
                     mCamera.reconnect();
+                    vibrate();
                 } catch (Exception e) {
                     Log.e(TAG, "reconect fail"+e.toString());
                 }
             }
         }
+    }
+
+    /**
+     * 震动00毫秒
+     */
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        vibrator.vibrate(200);
     }
 
     class TimerThread extends TimerTask {
