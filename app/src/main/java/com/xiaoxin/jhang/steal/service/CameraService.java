@@ -41,7 +41,7 @@ import java.util.TimerTask;
 
 public class CameraService extends Service {
 
-    private static String TAG = "---PhotoVideoService---";
+    private static String TAG = "CameraService";
     private Context mContext;
 
     private MediaRecorder mMediaRecorder;
@@ -52,6 +52,7 @@ public class CameraService extends Service {
     private int mTime;
     private boolean mPicVideo;
     public WindowManager mWindowManager;
+    private boolean light,black;
 
     @Nullable
     @Override
@@ -100,7 +101,9 @@ public class CameraService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         mPicVideo = intent.getBooleanExtra("pic_video",false);
-        mTime = intent.getIntExtra("time",10);
+//        mTime = intent.getIntExtra("time",10);
+        int videoTime = PrefUtils.getInt(this, Config.VIDEO_LENGTH, Config.TIME);
+        mTime = videoTime;
 
         innerReceiver = new InnerReceiver();
         IntentFilter filter1 = new IntentFilter();
@@ -213,7 +216,7 @@ public class CameraService extends Service {
         public void onPictureTaken(byte[] data, Camera camera) {
             // 将得到的照片进行270°旋转，使其竖直
             //处理图像数据
-            BitmapUtil.obtainPic(data);
+            BitmapUtil.obtainPic(CameraService.this,data);
 
             try {
                 mCamera.reconnect();
@@ -330,13 +333,35 @@ public class CameraService extends Service {
             String action = intent.getAction();
             if (Intent.ACTION_SCREEN_ON.equals(action)) {
                 Log.i(TAG, "--屏幕亮屏，开启心跳检测");
-                startCamera(true);
+                int light = PrefUtils.getInt(context, Config.LIGHT, 0);
+//                startCamera(true);
+                select(light);
             } else if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                int black = PrefUtils.getInt(context, Config.BLACK, 0);
                 Log.i(TAG, "--屏幕灭屏，关闭心跳检测");
-                startCamera(false);
+//                startCamera(false);
+                select(black);
             }else if (Intent.ACTION_USER_PRESENT.equals(action)) {
                 Log.i(TAG, "--屏幕解锁");
             }
+        }
+    }
+
+    private void select(int position) {
+
+        switch (position) {
+            case 0:
+                break;
+            case 1:
+                startCamera(true);
+                break;
+            case 2:
+                startCamera(false);
+                break;
+            default:
+                startCamera(true);
+                break;
+
         }
     }
 

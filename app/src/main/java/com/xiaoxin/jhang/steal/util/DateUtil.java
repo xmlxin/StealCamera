@@ -15,4 +15,8 @@ public class DateUtil {
     public static String FormatData() {
         return new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
     }
+
+    public static String formatDataToFile() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    }
 }

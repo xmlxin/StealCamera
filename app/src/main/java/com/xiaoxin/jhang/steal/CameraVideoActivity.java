@@ -162,7 +162,7 @@ public class CameraVideoActivity extends AppCompatActivity {
         public void onPictureTaken(byte[] data, Camera camera) {
             // 将得到的照片进行270°旋转，使其竖直
             //处理图像数据
-            BitmapUtil.obtainPic(data);
+            BitmapUtil.obtainPic(CameraVideoActivity.this,data);
 
             try {
                 mCamera.reconnect();

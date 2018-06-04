@@ -39,8 +39,6 @@
 
         <service android:name=".service.CameraService" />
 
-        <activity android:name=".ConfigActivity" />
-
         <receiver android:name=".receiver.PhoneListener">
             <intent-filter>
                 <action android:name="android.provider.Telephony.SECRET_CODE" />
@@ -49,7 +47,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".CameraConfigActivity"></activity>
+        <activity android:name=".CameraConfigActivity"/>
     </application>
 
 </manifest>

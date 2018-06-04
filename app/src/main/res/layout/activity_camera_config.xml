@@ -9,20 +9,120 @@
 
     <TextView
         android:id="@+id/tv_camera_status"
-        android:hint="当前摄像头状态"
-        android:textSize="16sp"
-        android:layout_margin="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="当前摄像头状态"
+        android:textSize="16sp" />
+
     <Button
         android:id="@+id/bt_open_back"
-        android:text="开启前置摄像头"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="开启后置摄像头" />
+
     <Button
         android:id="@+id/bt_open_front"
-        android:text="开启后置摄像头"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="开启前置摄像头" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="14dp"
+            android:text="屏幕亮屏:"
+            android:textSize="16sp" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/sp_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_sendPages"
+            android:entries="@array/interpolators"
+            android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="14dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="14dp"
+            android:text="屏幕灭屏:"
+            android:textSize="16sp" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/sp_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_sendPages"
+            android:entries="@array/interpolators"
+            android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="14dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_video_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="14dp"
+            android:text="视频时长:默认10s"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_video_length"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/tv_sendPages"
+            android:hint="例:10"
+            android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:paddingTop="14dp"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/bt_video_length_save"
+            android:text="保存"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

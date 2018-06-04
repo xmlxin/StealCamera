@@ -21,6 +21,12 @@ public class FileUtil {
         if(!rootFile.exists()){
             rootFile.mkdirs() ;
         }
+
+        File dayFile = new File(Config.DAY_PATH);
+        if(!dayFile.exists()){
+            dayFile.mkdirs() ;
+        }
+
         File nomedia = new File(Config.PATH+".nomedia") ;
         if (!nomedia.exists()) {
             nomedia.mkdir();
@@ -29,11 +35,11 @@ public class FileUtil {
 
     public static File picturePath() {
         FileUtil.isPathExist();
-        return new File(Config.PATH + "IMG_" + DateUtil.FormatData() + ".jpg");
+        return new File(Config.DAY_PATH + "IMG_" + DateUtil.FormatData() + ".jpg");
     }
 
     public static String videoPath() {
         FileUtil.isPathExist();
-        return Config.PATH + "VID_" + DateUtil.FormatData() + ".mp4";
+        return Config.DAY_PATH + "VID_" + DateUtil.FormatData() + ".mp4";
     }
 }
