@@ -15,11 +15,13 @@ import com.xiaoxin.jhang.steal.util.DateUtil;
 public class Config {
 
     //路径
-    public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaoxin/";
-    public static final String DAY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaoxin/"+ DateUtil.formatDataToFile()+"/";
+    public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaoxin1/";
+    public static final String DAY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaoxin1/"+ DateUtil.formatDataToFile()+"/";
 //    public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/abc/";
 //    public static final String DAY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/abc/"+ DateUtil.formatDataToFile()+"/";
 
+    public static String SpecialPic = "[pic";
+    public static String SpecialVideo = "[vid";
     public static final String SECRET_CODE = "123456";
     /** camera */
     //设置摄像头状态

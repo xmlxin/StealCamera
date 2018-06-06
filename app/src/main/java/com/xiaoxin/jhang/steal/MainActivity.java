@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.xiaoxin.jhang.steal.service.CameraService;
+import com.xiaoxin.jhang.steal.util.AccessibilityUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +25,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.bt_accessibility).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AccessibilityUtil.checkAccessibility(MainActivity.this);
+            }
+        });
         findViewById(R.id.bt_white).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,14 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 stopService(new Intent(MainActivity.this, CameraService.class));
             }
         });
-
-        ObjectAnimator animator = ObjectAnimator
-                .ofFloat( findViewById(R.id.bt_white),"translate",0.0f,360f)
-                                                .setDuration(5000);
-        animator.start();
-        //等价于上面
-//        Button button = (Button)findViewById(R.id.bt_white);
-//        button.animate().rotation(360f).setDuration(50000);
+        
     }
 
     public void startService() {

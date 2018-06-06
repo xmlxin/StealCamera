@@ -20,6 +20,15 @@
         app:showDividers="beginning|middle" >
 
     <Button
+        android:id="@+id/bt_accessibility"
+        android:text="开启辅助功能"
+        android:elevation="5dp"
+        android:layout_marginTop="300dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
         android:id="@+id/bt_white"
         android:text="加入白名单"
         android:elevation="5dp"
