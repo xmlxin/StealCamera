@@ -1,9 +1,13 @@
 package com.xiaoxin.jhang.steal.util;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.telephony.TelephonyManager;
+
+import java.util.List;
 
 /**
  * @author: xiaoxin
@@ -34,4 +38,34 @@ public class AppUtil {
         String imei = telephonyManager.getDeviceId();
         return imei;
     }
+
+    /**
+     * className "com.xxx.xx..XXXService"
+     */
+    public static boolean isServiceRunning(Context context, String className) {
+        boolean isRunning = false;
+        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningServiceInfo> servicesList = activityManager.getRunningServices(Integer.MAX_VALUE);
+        for (ActivityManager.RunningServiceInfo si : servicesList) {
+            if (className.equals(si.service.getClassName())) {
+                isRunning = true;
+            }
+        }
+        return isRunning;
+    }
+
+    public static boolean stopRunningService(Context context, String className) {
+        Intent intent_service = null;
+        boolean ret = false;
+        try {
+            intent_service = new Intent(context, Class.forName(className));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (intent_service != null) {
+            ret = context.stopService(intent_service);
+        }
+        return ret;
+    }
+
 }

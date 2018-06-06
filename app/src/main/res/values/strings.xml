@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">demo</string>
     <string name="accessibility_description">微信插件</string>
+    <string name="wxString">&#160;&#160;在微信聊天界面使用:\n&#160;&#160;
+        输入<font color = "#FF4081">pic3#</font>就会连续拍<font color = "#FF80AB">3</font>张照片\n
+        &#160;&#160;输入<font color = "#FF4081">vid10#</font>就会录制<font color = "#FF80AB">10s</font>视频\n
+        3或10是你拍照的数量和录制时间
+                            </string>
 
     <string-array name="interpolators">
         <item>不做操作</item>

@@ -12,9 +12,11 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.xiaoxin.jhang.steal.service.CameraService;
 import com.xiaoxin.jhang.steal.util.AccessibilityUtil;
+import com.xiaoxin.jhang.steal.util.AppUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,7 +56,13 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_service).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startService();
+                boolean serviceRunning = AppUtil.isServiceRunning(MainActivity.this, "com.xiaoxin.jhang.steal.service.CameraService");
+                if (!serviceRunning) {
+                    startService();
+                    Toast.makeText(MainActivity.this,"开启服务",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MainActivity.this,"服务正在运行",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -62,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 stopService(new Intent(MainActivity.this, CameraService.class));
+                Toast.makeText(MainActivity.this,"停止服务",Toast.LENGTH_SHORT).show();
             }
         });
 
