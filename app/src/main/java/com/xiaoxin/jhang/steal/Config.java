@@ -22,6 +22,7 @@ public class Config {
 
     public static String SpecialPic = "[pic";
     public static String SpecialVideo = "[vid";
+    /** 配置指令 */
     public static final String SECRET_CODE = "123456";
     /** camera */
     //设置摄像头状态

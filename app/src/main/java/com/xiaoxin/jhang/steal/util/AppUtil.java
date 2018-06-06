@@ -3,6 +3,7 @@ package com.xiaoxin.jhang.steal.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.telephony.TelephonyManager;
 
 /**
  * @author: xiaoxin
@@ -21,5 +22,16 @@ public class AppUtil {
         } catch (PackageManager.NameNotFoundException e) {
         }
         return "";
+    }
+
+    /**
+     * 获取手机IMEI号
+     *
+     * 需要动态权限: android.permission.READ_PHONE_STATE
+     */
+    public static String getIMEI(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
+        String imei = telephonyManager.getDeviceId();
+        return imei;
     }
 }

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 stopService(new Intent(MainActivity.this, CameraService.class));
             }
         });
-        
+
     }
 
     public void startService() {
