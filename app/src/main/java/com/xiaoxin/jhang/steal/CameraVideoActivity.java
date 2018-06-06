@@ -34,6 +34,7 @@ public class CameraVideoActivity extends AppCompatActivity {
     private boolean mIsRecording = false;
     private int mTime;
     private boolean mPicVideo;
+    private int count = 1;
 
     Button start;
 
@@ -80,13 +81,14 @@ public class CameraVideoActivity extends AppCompatActivity {
         mTime = getIntent().getIntExtra("time",10);
 
         if (mPicVideo) {  //拍照
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mCamera.takePicture(null, null, mPicture);
-                    Log.e(TAG,"拍照");
-                }
-            },2000);//延迟2s做准备
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    mCamera.takePicture(null, null, mPicture);
+//                    Log.e(TAG,"拍照");
+//                }
+//            },2000);//延迟2s做准备
+            takePicture();
         }else {  //录像
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -99,6 +101,23 @@ public class CameraVideoActivity extends AppCompatActivity {
             },2000);
         }
 
+    }
+
+    private void takePicture() {
+        Log.e(TAG, "onClick: ");
+        if (count < 5) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.e(TAG,"拍照"+count);
+                    mCamera.takePicture(null, null, mPicture);
+                    count++;
+                }
+            },2000);//延迟2s做准备
+
+        }else {
+            Log.e(TAG,"结束拍照");
+        }
     }
 
     /**
@@ -166,6 +185,8 @@ public class CameraVideoActivity extends AppCompatActivity {
 
             try {
                 mCamera.reconnect();
+//                initPreview();
+//                takePicture();
                 vibrate();
                 finish();
             } catch (Exception e) {

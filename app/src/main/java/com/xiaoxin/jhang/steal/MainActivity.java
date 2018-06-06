@@ -1,14 +1,17 @@
 package com.xiaoxin.jhang.steal;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Vibrator;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 
 import com.xiaoxin.jhang.steal.service.CameraService;
 
@@ -54,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
                 stopService(new Intent(MainActivity.this, CameraService.class));
             }
         });
+
+        ObjectAnimator animator = ObjectAnimator
+                .ofFloat( findViewById(R.id.bt_white),"translate",0.0f,360f)
+                                                .setDuration(5000);
+        animator.start();
+        //等价于上面
+//        Button button = (Button)findViewById(R.id.bt_white);
+//        button.animate().rotation(360f).setDuration(50000);
     }
 
     public void startService() {

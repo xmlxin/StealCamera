@@ -247,7 +247,7 @@ public class CameraService extends Service {
         // Step 1: Unlock and set camera to MediaRecorder
         mCamera.unlock();
         mMediaRecorder.setCamera(mCamera);
-        mMediaRecorder.setOrientationHint(90);//78后置摄像头选择90度，前置摄像头旋转270度
+        mMediaRecorder.setOrientationHint(90);//后置摄像头选择90度，前置摄像头旋转270度
 
         // Step 2: Set sources
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.DEFAULT);//VOICE_RECOGNITION

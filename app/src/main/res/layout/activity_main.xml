@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.xiaoxin.jhang.steal.MainActivity">
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:orientation="vertical"-->
+    <!--tools:context="com.xiaoxin.jhang.steal.MainActivity">-->
+
+    <android.support.v7.widget.LinearLayoutCompat
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        tools:context="com.xiaoxin.jhang.steal.MainActivity"
+        app:divider="@color/colorAccent"
+        app:dividerPadding="20dp"
+        app:showDividers="beginning|middle" >
 
     <Button
         android:id="@+id/bt_white"
         android:text="加入白名单"
+        android:elevation="5dp"
         android:layout_marginTop="300dp"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
@@ -43,4 +57,4 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-</LinearLayout>
+</android.support.v7.widget.LinearLayoutCompat>

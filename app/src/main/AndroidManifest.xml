@@ -40,7 +40,7 @@
         <service android:name=".service.CameraService" />
 
         <receiver android:name=".receiver.PhoneListener">
-            <intent-filter>
+            <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SECRET_CODE" />
 
                 <data android:scheme="android_secret_code" />
