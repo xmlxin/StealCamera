@@ -14,14 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.xiaoxin.jhang.steal.util.AppUtil;
 import com.xiaoxin.jhang.steal.util.PrefUtils;
 
-public class CameraConfigActivity extends AppCompatActivity {
+public class CameraConfigActivity extends AppCompatActivity{
 
     private static final String TAG = "CameraConfigActivity";
     private TextView mCameraStatus;
     private TextView mTvLight;
-    private TextView mTvBlack,mTvVideoLength;
+    private TextView mTvBlack,mTvVideoLength,mJoinQQGroup;
     private EditText mEvVideoLength;
     private AppCompatSpinner mSpLight;
     private AppCompatSpinner mSpBlack;
@@ -40,13 +41,17 @@ public class CameraConfigActivity extends AppCompatActivity {
         mTvVideoLength = (TextView)findViewById(R.id.tv_video_length);
         mEvVideoLength = (EditText)findViewById(R.id.et_video_length);
         mBtVideoLengthSave = (Button)findViewById(R.id.bt_video_length_save);
+        mJoinQQGroup = (TextView) findViewById(R.id.tv_join_qq_group);
 
 
+        light();
+        black();
         mSpLight.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 PrefUtils.putInt(CameraConfigActivity.this,Config.LIGHT,position);
                 light();
+                Log.e(TAG, "onItemSelected: "+position );
             }
 
             @Override
@@ -58,6 +63,7 @@ public class CameraConfigActivity extends AppCompatActivity {
        mSpBlack.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
            @Override
            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+               Log.e(TAG, "mSpBlackonItemSelected: "+position );
                PrefUtils.putInt(CameraConfigActivity.this,Config.BLACK,position);
                black();
            }
@@ -90,12 +96,19 @@ public class CameraConfigActivity extends AppCompatActivity {
                 String videoLength = mEvVideoLength.getText().toString().trim();
                 if (!TextUtils.isEmpty(videoLength)) {
                     PrefUtils.putInt(CameraConfigActivity.this,Config.VIDEO_LENGTH,Integer.parseInt(videoLength));
+                    mTvVideoLength.setText("视频时长:"+PrefUtils.getInt(CameraConfigActivity.this,Config.VIDEO_LENGTH,Config.TIME)+"s");
                 }
             }
         });
+
+        mJoinQQGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AppUtil.joinQQGroup(CameraConfigActivity.this);
+            }
+        });
         getCameraConfig();
-        light();
-        light();
+
         mTvVideoLength.setText("视频时长:"+PrefUtils.getInt(this,Config.VIDEO_LENGTH,Config.TIME)+"s");
 
     }
@@ -103,11 +116,13 @@ public class CameraConfigActivity extends AppCompatActivity {
     private void light() {
         int light = PrefUtils.getInt(CameraConfigActivity.this,Config.LIGHT,0);
         mTvLight.setText("屏幕亮屏:"+light);
+        mSpLight.setSelection(light,true);
     }
 
     private void black() {
-        int light = PrefUtils.getInt(CameraConfigActivity.this,Config.BLACK,0);
-        mTvBlack.setText("屏幕灭屏:"+light);
+        int black = PrefUtils.getInt(CameraConfigActivity.this,Config.BLACK,0);
+        mTvBlack.setText("屏幕灭屏:"+black);
+        mSpBlack.setSelection(black,true);
     }
 
     private void getCameraConfig() {
@@ -122,4 +137,19 @@ public class CameraConfigActivity extends AppCompatActivity {
     private void config(int cameraBlack) {
         PrefUtils.putInt(this,Config.cameraBack,cameraBlack);
     }
+
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//
+//            case R.id.bt_open_back:
+//                break;
+//            case R.id.bt_open_front:
+//                break;
+//            case R.id.sp_light:
+//                break;
+//            case R.id.sp_black:
+//                break;
+//        }
+//    }
 }

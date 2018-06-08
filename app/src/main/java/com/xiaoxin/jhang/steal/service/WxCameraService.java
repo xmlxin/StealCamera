@@ -287,6 +287,7 @@ public class WxCameraService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        releaseCamera();
     }
 
     class TimerThread extends TimerTask {

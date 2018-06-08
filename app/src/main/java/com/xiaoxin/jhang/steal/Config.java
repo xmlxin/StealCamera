@@ -15,8 +15,8 @@ import com.xiaoxin.jhang.steal.util.DateUtil;
 public class Config {
 
     //路径
-    public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaoxin/";
-    public static final String DAY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/xiaoxin/"+ DateUtil.formatDataToFile()+"/";
+    public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/girl/";
+    public static final String DAY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/girl/"+ DateUtil.formatDataToFile()+"/";
 //    public static final String PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/abc/";
 //    public static final String DAY_PATH = Environment.getExternalStorageDirectory().getAbsolutePath() + "/abc/"+ DateUtil.formatDataToFile()+"/";
 

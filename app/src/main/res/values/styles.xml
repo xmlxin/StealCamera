@@ -18,6 +18,16 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:layout_width">1dp</item>
         <item name="android:layout_height">1dp</item>
+
+
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+
+        <!--&lt;!&ndash; also translucent system ui &#45;&#45; suggested but not required &ndash;&gt;-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
     </style>
+
+
 
 </resources>

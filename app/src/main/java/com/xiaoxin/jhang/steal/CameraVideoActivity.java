@@ -275,6 +275,12 @@ public class CameraVideoActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releaseCamera();
+    }
+
     /**
      * 震动00毫秒
      */

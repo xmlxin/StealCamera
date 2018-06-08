@@ -2,6 +2,7 @@ package com.xiaoxin.jhang.steal.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 /**
  * 专门访问和设置SharePreference的工具类, 保存和配置一些设置信息
@@ -46,7 +47,7 @@ public class PrefUtils {
 	public static void putInt(Context ctx, String key, int value) {
 		SharedPreferences pref = ctx.getSharedPreferences(SHARE_PREFS_NAME,
 				Context.MODE_PRIVATE);
-
+		
 		pref.edit().putInt(key, value).apply();
 	}
 

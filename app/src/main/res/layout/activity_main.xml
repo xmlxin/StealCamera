@@ -39,28 +39,28 @@
 
     <Button
         android:id="@+id/bt_pic"
-        android:text="demo1"
+        android:text="拍照"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/bt_video"
-        android:text="demo2"
+        android:text="录像"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/bt_service"
-        android:text="demo3"
+        android:text="开启后台服务"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/bt_stopService"
-        android:text="demo4"
+        android:text="关闭后台服务"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

@@ -241,11 +241,12 @@ public class CameraService extends Service {
         //https://blog.csdn.net/qwildwolf/article/details/78664149
         CamcorderProfile mProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
         // BEGIN_INCLUDE (configure_media_recorder)
+        mCamera.unlock();
         mMediaRecorder = new MediaRecorder();
         mMediaRecorder.reset();
         mIsRecording = true;
         // Step 1: Unlock and set camera to MediaRecorder
-        mCamera.unlock();
+
         mMediaRecorder.setCamera(mCamera);
         mMediaRecorder.setOrientationHint(90);//后置摄像头选择90度，前置摄像头旋转270度
 
@@ -308,6 +309,7 @@ public class CameraService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        releaseCamera();
         unregisterReceiver(innerReceiver);
     }
 

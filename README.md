@@ -31,7 +31,7 @@ Camera拍照、MediaRecorder录制视频demo
 
 
 Camera拍摄高清图片
-这个和手机又关系，有的手机默认像素是高质量的有的是低质量
+这个和手机有关系，有的手机默认像素是高质量的有的是低质量
 一般要自己设置图片尺寸
 
 	  Camera.Parameters parameters = mCamera.getParameters();

@@ -6,6 +6,8 @@
         &#160;&#160;输入<font color = "#FF4081">vid10#</font>就会录制<font color = "#FF80AB">10s</font>视频\n
         3或10是你拍照的数量和录制时间
                             </string>
+    
+    <string name="joinQQGroup"><font color = "#06a8f2">点击加入qq群702235865</font></string>
 
     <string-array name="interpolators">
         <item>不做操作</item>
